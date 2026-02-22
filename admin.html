@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS | Vishwaloka Vandana</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            maroon: '#800000',
+                            gold: '#D4AF37',
+                            gray: '#F3F4F6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100 font-sans text-gray-800">
+
+    <div class="min-h-screen flex flex-col md:flex-row">
+
+        <!-- Login Section (Overlay) -->
+        <div id="login-section" class="fixed inset-0 z-50 bg-brand-maroon flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center space-y-6">
+                <div>
+                    <span class="text-3xl font-serif font-bold tracking-tight text-gray-900">Vishwaloka <span
+                            class="text-brand-gold">CMS</span></span>
+                    <p class="text-gray-500 mt-2">Secure Admin Access</p>
+                </div>
+
+                <form id="login-form" class="space-y-4 text-left">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Email Address</label>
+                        <input type="email" id="email" required
+                            class="mt-1 block w-full rounded-lg border-gray-300 border px-4 py-3 focus:border-brand-maroon focus:ring-1 focus:ring-brand-maroon outline-none transition-colors"
+                            placeholder="admin@gmail.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="password" required
+                            class="mt-1 block w-full rounded-lg border-gray-300 border px-4 py-3 focus:border-brand-maroon focus:ring-1 focus:ring-brand-maroon outline-none transition-colors">
+                    </div>
+                    <div id="login-error"
+                        class="text-red-600 text-sm font-medium text-center hidden p-2 bg-red-50 rounded"></div>
+                    <button type="submit"
+                        class="w-full bg-brand-maroon text-white font-bold py-3.5 rounded-lg hover:bg-red-900 transition-colors shadow-lg shadow-red-900/20">
+                        Sign In to Dashboard
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar"
+            class="hidden bg-brand-maroon w-full md:w-64 flex-shrink-0 md:min-h-screen text-white shadow-2xl z-10 md:flex flex-col">
+            <div class="p-6 border-b border-red-900">
+                <span class="text-2xl font-serif font-bold tracking-tight">Vishwaloka<br /><span
+                        class="text-brand-gold text-base">CMS Panel</span></span>
+            </div>
+            <nav class="p-4 space-y-2 flex-grow">
+                <a href="#" class="block px-4 py-3 bg-red-900/50 rounded-lg text-white font-medium">Dashboard</a>
+                <a href="index.html" target="_blank"
+                    class="block px-4 py-3 text-red-100 hover:bg-red-900/30 rounded-lg transition-colors flex items-center justify-between">
+                    Live Website <span class="text-xs">↗</span>
+                </a>
+            </nav>
+            <div class="p-4 border-t border-red-900">
+                <button id="logout-btn"
+                    class="w-full px-4 py-2 bg-red-950/50 hover:bg-red-950 text-red-100 rounded-lg transition-colors text-sm">Sign
+                    Out</button>
+            </div>
+        </div>
+
+        <!-- Main Content (Hidden initially) -->
+        <div id="dashboard-content" class="hidden flex-1 p-8 overflow-y-auto">
+            <header class="mb-10 flex justify-between items-end border-b border-gray-200 pb-6">
+                <div>
+                    <h1 class="text-3xl font-serif font-bold text-gray-900">Manage Content</h1>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-10">
+
+                <!-- Tour Form Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                        <h2 class="text-lg font-bold text-gray-700">Tour Editor</h2>
+                        <span
+                            class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded font-bold uppercase">Form</span>
+                    </div>
+                    <div class="p-6">
+                        <form id="add-tour-form" class="space-y-4">
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Title</label>
+                                <input type="text" id="tour-title" required
+                                    class="block w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 focus:bg-white focus:border-brand-maroon transition-colors"
+                                    placeholder="e.g. Dambadiwa Charika">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Price
+                                        (LKR)</label>
+                                    <input type="number" id="tour-price" required
+                                        class="block w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 focus:bg-white focus:border-brand-maroon transition-colors">
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Details</label>
+                                <textarea id="tour-desc" rows="3" required
+                                    class="block w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 focus:bg-white focus:border-brand-maroon transition-colors"></textarea>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Image
+                                    URL</label>
+                                <input type="url" id="tour-image" required placeholder="https://..."
+                                    class="block w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 focus:bg-white focus:border-brand-maroon transition-colors">
+                            </div>
+                            <div class="pt-2">
+                                <button type="submit"
+                                    class="w-full bg-brand-maroon text-white font-bold py-3 rounded-lg hover:bg-red-900 transition-colors">
+                                    Publish Tour
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Tours List for Edit/Delete -->
+                    <div class="border-t border-gray-200 bg-gray-50">
+                        <div class="px-6 py-3 border-b border-gray-200">
+                            <h3 class="text-xs font-bold text-gray-500 uppercase">Existing Tours</h3>
+                        </div>
+                        <div id="admin-tours-list" class="divide-y divide-gray-100 max-h-96 overflow-y-auto bg-white">
+                            <!-- Populated by JS -->
+                            <p class="p-6 text-center text-gray-400 text-sm">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Album Manager Section -->
+                <div class="space-y-10">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                            <h2 class="text-lg font-bold text-gray-700">Gallery / Album Manager</h2>
+                            <button onclick="document.getElementById('create-album-modal').classList.remove('hidden')" 
+                                class="bg-brand-maroon text-white text-xs font-bold px-3 py-2 rounded hover:bg-red-900 transition-colors shadow-sm">
+                                + New Album
+                            </button>
+                        </div>
+                        
+                        <div class="p-0">
+                            <!-- Albums List -->
+                            <div id="admin-albums-list" class="divide-y divide-gray-100 max-h-[600px] overflow-y-auto bg-white">
+                                <!-- Populated by JS -->
+                                <p class="p-6 text-center text-gray-400 text-sm">Loading albums...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Album Modal -->
+    <div id="create-album-modal" class="fixed inset-0 z-[60] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 transform transition-all">
+            <h3 class="text-xl font-serif font-bold text-gray-800 mb-4">Create New Album</h3>
+            <form id="create-album-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Album Title</label>
+                    <input type="text" id="album-title" required placeholder="e.g. Katharagama 2024"
+                        class="w-full border-gray-300 border bg-gray-50 rounded-lg px-4 py-3 focus:bg-white focus:border-brand-maroon outline-none transition-colors">
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('create-album-modal').classList.add('hidden')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-brand-maroon text-white font-bold rounded-lg hover:bg-red-900 shadow-lg transition-colors">Create Album</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Album Modal (Manage Images) -->
+    <div id="view-album-modal" class="fixed inset-0 z-[60] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-white z-10">
+                <div>
+                    <h3 class="text-2xl font-serif font-bold text-gray-800" id="view-album-title">Album Name</h3>
+                    <p class="text-sm text-gray-500">Manage photos in this album</p>
+                </div>
+                <button onclick="closeViewAlbum()" class="text-gray-400 hover:text-red-600 transition-colors p-2 hover:bg-red-50 rounded-full">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="flex flex-col md:flex-row h-full overflow-hidden">
+                <!-- Sidebar: Import Tools -->
+                <div class="w-full md:w-80 bg-gray-50 border-r border-gray-200 p-6 overflow-y-auto flex-shrink-0">
+                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Add Photos</h4>
+                    
+                    <div class="space-y-6">
+                        <!-- PostImg Import -->
+                        <div class="bg-white p-4 rounded-xl border border-blue-100 shadow-sm">
+                            <label class="block text-sm font-bold text-blue-900 mb-2">Import from PostImg</label>
+                            <p class="text-xs text-blue-600/80 mb-3 leading-relaxed">
+                                Paste a PostImages Album URL (e.g. <code>postimg.cc/gallery/...</code>) to try auto-importing.
+                            </p>
+                            <div class="flex flex-col gap-2">
+                                <input type="text" id="import-url" placeholder="https://postimg.cc/gallery/..." 
+                                    class="w-full border-gray-200 border rounded-lg px-3 py-2 text-sm focus:border-blue-500 outline-none">
+                                <button onclick="handleImport()" class="w-full bg-blue-600 text-white font-bold text-sm py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+                                    Import / Add
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Manual Paste -->
+                        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Paste Content/LINKS</label>
+                             <p class="text-xs text-gray-500 mb-3 leading-relaxed">
+                                If import fails, copy the "Direct Links" from PostImages and paste them here.
+                            </p>
+                            <textarea id="manual-links" rows="6" placeholder="https://i.postimg.cc/...\nhttps://i.postimg.cc/..." 
+                                class="w-full border-gray-200 border rounded-lg px-3 py-2 text-xs focus:border-brand-maroon outline-none font-mono"></textarea>
+                            <button onclick="handleManualPaste()" class="w-full mt-2 bg-gray-800 text-white font-bold text-sm py-2 rounded-lg hover:bg-black transition-colors">
+                                Add Links
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main: Grid -->
+                <div class="flex-1 bg-white p-6 overflow-y-auto relative">
+                    <div class="flex justify-between items-end mb-6">
+                         <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest">Album Content</h4>
+                         <span id="album-count" class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded font-bold">0 Items</span>
+                    </div>
+
+                    <div id="album-images-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-20">
+                        <!-- Populated JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, orderBy, query, serverTimestamp, doc, deleteDoc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+// -- Config --
+const firebaseConfig = {
+    apiKey: "AIzaSyDGtdOWlC2kFNjjKXsebOjchOdxK-thwX8",
+    authDomain: "shwaloka-vandana.firebaseapp.com",
+    databaseURL: "https://shwaloka-vandana-default-rtdb.firebaseio.com",
+    projectId: "shwaloka-vandana",
+    storageBucket: "shwaloka-vandana.firebasestorage.app",
+    messagingSenderId: "96798459834",
+    appId: "1:96798459834:web:f348541dc3367209fe3f83"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// -- Admin Logic --
+// -- Authentication Logic --
+
+const loginSection = document.getElementById('login-section');
+const dashboardContent = document.getElementById('dashboard-content');
+const sidebar = document.getElementById('sidebar');
+const loginForm = document.getElementById('login-form');
+const logoutBtn = document.getElementById('logout-btn');
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        if (loginSection) loginSection.classList.add('hidden');
+        if (dashboardContent) dashboardContent.classList.remove('hidden');
+        if (sidebar) {
+            sidebar.classList.remove('hidden');
+            sidebar.classList.add('flex');
+        }
+        loadToursInAdmin();
+        loadAlbums();
+    } else {
+        if (loginSection) loginSection.classList.remove('hidden');
+        if (dashboardContent) dashboardContent.classList.add('hidden');
+        if (sidebar) {
+            sidebar.classList.add('hidden');
+            sidebar.classList.remove('flex');
+        }
+    }
+});
+
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('login-error');
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            console.error(error);
+            const errorCode = error.code;
+            let errorMessage = "Access denied.";
+
+            if (errorCode === 'auth/invalid-credential' || errorCode === 'auth/wrong-password' || errorCode === 'auth/user-not-found') {
+                errorMessage = "Invalid email or password.";
+            } else if (errorCode === 'auth/operation-not-allowed') {
+                errorMessage = "CRITICAL: Email/Password login is not enabled in Firebase Console!";
+            } else if (errorCode === 'auth/network-request-failed') {
+                errorMessage = "Network error. Check your connection.";
+            } else {
+                errorMessage = error.message;
+            }
+
+            alert(errorMessage);
+            if (errorDiv) {
+                errorDiv.innerText = errorMessage;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+    });
+}
+
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        signOut(auth);
+    });
+}
+
+
+// -- Data Management Logic --
+
+let editingTourId = null;
+let currentAlbumId = null;
+
+// Handle Add/Edit Tour
+const tourForm = document.getElementById('add-tour-form');
+const tourSubmitBtn = tourForm ? tourForm.querySelector('button') : null;
+
+if (tourForm) {
+    tourForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const title = document.getElementById('tour-title').value;
+        const price = document.getElementById('tour-price').value;
+        const description = document.getElementById('tour-desc').value;
+        const imageUrl = document.getElementById('tour-image').value;
+
+        try {
+            tourSubmitBtn.disabled = true;
+            tourSubmitBtn.innerText = 'Processing...';
+
+            if (editingTourId) {
+                // Update Logic
+                const tourRef = doc(db, "tours", editingTourId);
+                await updateDoc(tourRef, {
+                    title,
+                    price,
+                    description,
+                    image_url: imageUrl,
+                    updated_at: serverTimestamp()
+                });
+                alert('Tour updated successfully!');
+                editingTourId = null;
+                tourSubmitBtn.innerText = 'Publish Tour';
+            } else {
+                // Add Logic
+                await addDoc(collection(db, "tours"), {
+                    title,
+                    price,
+                    description,
+                    image_url: imageUrl,
+                    created_at: serverTimestamp()
+                });
+                alert('Tour added successfully!');
+            }
+
+            tourForm.reset();
+            loadToursInAdmin();
+
+        } catch (error) {
+            console.error('Error saving tour:', error);
+            alert('Error: ' + error.message);
+        } finally {
+            tourSubmitBtn.disabled = false;
+            tourSubmitBtn.innerText = editingTourId ? 'Update Tour' : 'Publish Tour';
+        }
+    });
+}
+
+// -- Album Logic --
+
+// Create Album
+const createAlbumForm = document.getElementById('create-album-form');
+if (createAlbumForm) {
+    createAlbumForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const title = document.getElementById('album-title').value;
+        const btn = createAlbumForm.querySelector('button[type="submit"]');
+        
+        try {
+            btn.innerText = 'Creating...';
+            btn.disabled = true;
+            await addDoc(collection(db, "albums"), {
+                title: title,
+                images: [],
+                created_at: serverTimestamp()
+            });
+            createAlbumForm.reset();
+            document.getElementById('create-album-modal').classList.add('hidden');
+            loadAlbums();
+            alert('Album created!');
+        } catch (err) {
+            console.error(err);
+            alert("Error creating album: " + err.message);
+        } finally {
+            btn.innerText = 'Create Album';
+            btn.disabled = false;
+        }
+    });
+}
+
+window.deleteAlbum = async(id) => {
+    if(!confirm("Delete this entire album?")) return;
+    try {
+        await deleteDoc(doc(db, "albums", id));
+        loadAlbums();
+    } catch(err) {
+        alert("Error: " + err.message);
+    }
+}
+
+window.viewAlbum = async (id) => {
+    currentAlbumId = id;
+    const modal = document.getElementById('view-album-modal');
+    modal.classList.remove('hidden');
+    
+    // Load fresh data
+    const docRef = doc(db, "albums", id);
+    const docSnap = await getDoc(docRef);
+    if(docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById('view-album-title').innerText = data.title;
+        renderAlbumImages(data.images || []);
+    }
+}
+
+window.closeViewAlbum = () => {
+    document.getElementById('view-album-modal').classList.add('hidden');
+    currentAlbumId = null;
+    loadAlbums(); // refresh list to update counts if any
+}
+
+function renderAlbumImages(images) {
+    const grid = document.getElementById('album-images-grid');
+    const countEl = document.getElementById('album-count');
+    
+    if(countEl) countEl.innerText = images.length + " Items";
+    
+    if(images.length === 0) {
+        grid.innerHTML = '<div class="col-span-full flex flex-col items-center justify-center text-gray-400 py-16"><span class="text-4xl mb-4">📷</span><p>No images yet. Import some!</p></div>';
+        return;
+    }
+    
+    grid.innerHTML = images.map(url => `
+        <div class="relative group aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+            <img src="${url}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                <button onclick="removeImageFromAlbum('${url}')" class="bg-red-600 text-white p-2 rounded-full hover:bg-red-700 shadow-lg transform hover:scale-110 transition-transform" title="Remove">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+window.removeImageFromAlbum = async (urlToRemove) => {
+    if(!currentAlbumId) return;
+    if(!confirm("Remove this image?")) return;
+    
+    try {
+        const albumRef = doc(db, "albums", currentAlbumId);
+        const docSnap = await getDoc(albumRef);
+        if(docSnap.exists()) {
+            const data = docSnap.data();
+            const newImages = (data.images || []).filter(url => url !== urlToRemove);
+            
+            await updateDoc(albumRef, {
+                images: newImages,
+                updated_at: serverTimestamp()
+            });
+            renderAlbumImages(newImages);
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Error removing image");
+    }
+};
+
+window.handleImport = async () => {
+    const input = document.getElementById('import-url');
+    const val = input.value.trim();
+    if(!val) return;
+    
+    await processImport(val, input);
+};
+
+window.handleManualPaste = async () => {
+    const input = document.getElementById('manual-links');
+    const val = input.value.trim();
+    if(!val) return;
+    
+    await processImport(val, input);
+}
+
+async function processImport(textData, inputElement) {
+    if(!currentAlbumId) return;
+    
+    let newUrls = [];
+    
+    // Check if it's a PostImg Gallery URL or just a direct image link
+    if(textData.includes('postimg.cc/gallery')) {
+        alert("Attempting to fetch Gallery info... If this fails (due to Security), please use the manual copy-paste method.");
+        
+        try {
+            const response = await fetch(textData);
+            const html = await response.text();
+            
+            // Regex to find direct links (usually ends in .jpg/.png)
+            const regex = /https:\/\/i\.postimg\.cc\/[a-zA-Z0-9]+\/[a-zA-Z0-9_\-]+\.(jpg|jpeg|png|gif|webp)/g;
+            const matches = html.match(regex);
+            
+            if(matches && matches.length > 0) {
+                newUrls = [...new Set(matches)]; // unique
+                alert(`Found ${newUrls.length} images! Adding them...`);
+            } else {
+                throw new Error("No images found in content. Use 'Direct Links' from PostImg.");
+            }
+        } catch (err) {
+            console.warn("Auto-import failed", err);
+            const userLinks = prompt("Auto-import failed (CORS blocked). Go to PostImg Album -> Share -> Copy 'Direct Links' -> Paste below:");
+            if(userLinks) {
+                newUrls = userLinks.match(/https?:\/\/[^\s,;"']+/g) || [];
+            }
+        }
+    } else {
+        // Assume direct link or comma separated links
+         newUrls = textData.match(/https?:\/\/[^\s,;"']+\.(jpg|jpeg|png|webp|gif)/gi) || [];
+         // Fallback if no extension (some urls might not have it)
+         if(!newUrls.length) newUrls = textData.match(/https?:\/\/[^\s,;"']+/g) || [];
+    }
+    
+    if(newUrls.length > 0) {
+        try {
+            const albumRef = doc(db, "albums", currentAlbumId);
+            const docSnap = await getDoc(albumRef);
+            const currentImages = docSnap.data().images || [];
+            
+            // Merge unique
+            const updatedImages = [...new Set([...currentImages, ...newUrls])];
+            
+            await updateDoc(albumRef, {
+                images: updatedImages,
+                updated_at: serverTimestamp()
+            });
+            
+            renderAlbumImages(updatedImages);
+            inputElement.value = '';
+            alert(`Added ${newUrls.length} images.`);
+        } catch(err) {
+            alert("Error saving images: " + err.message);
+        }
+    } else {
+        alert("No valid URLs found.");
+    }
+}
+
+async function loadAlbums() {
+    const container = document.getElementById('admin-albums-list');
+    if (!container) return;
+
+    try {
+        const q = query(collection(db, "albums"), orderBy("created_at", "desc"));
+        const querySnapshot = await getDocs(q);
+
+        const albums = [];
+        querySnapshot.forEach((doc) => {
+            albums.push({ id: doc.id, ...doc.data() });
+        });
+
+        if (!albums.length) {
+            container.innerHTML = '<p class="p-8 text-center text-gray-500">No albums yet.</p>';
+            return;
+        }
+
+        container.innerHTML = albums.map(album => {
+            const imgCount = album.images ? album.images.length : 0;
+            const cover = (album.images && album.images.length > 0) ? album.images[0] : 'https://placehold.co/100x100?text=Empty';
+            
+            return `
+            <div class="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors bg-white">
+                <div class="flex items-center gap-4 cursor-pointer flex-1" onclick="viewAlbum('${album.id}')">
+                    <img src="${cover}" class="w-16 h-16 rounded-lg object-cover border border-gray-200" alt="">
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-lg">${album.title}</h4>
+                        <p class="text-sm text-gray-500">${imgCount} Photos</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                     <button onclick="viewAlbum('${album.id}')" class="px-3 py-1 bg-brand-maroon/10 text-brand-maroon rounded-lg hover:bg-brand-maroon hover:text-white transition-colors text-sm font-bold">
+                        Manage Photos
+                     </button>
+                     <button onclick="deleteAlbum('${album.id}')" class="p-2 text-gray-400 hover:text-red-600 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                     </button>
+                </div>
+            </div>
+        `}).join('');
+    } catch (error) {
+        console.error(error);
+        container.innerHTML = '<p class="p-4 text-red-500 text-center text-sm">Error loading data.</p>';
+    }
+}
+
+// Global functions for inline HTML event handlers
+window.deleteTour = async (id) => {
+    if (!confirm('Are you sure you want to delete this tour? This cannot be undone.')) return;
+    try {
+        await deleteDoc(doc(db, "tours", id));
+        loadToursInAdmin();
+        alert('Tour deleted.');
+    } catch (error) {
+        console.error("Error deleting tour: ", error);
+        alert("Delete failed: " + error.message);
+    }
+};
+
+window.editTour = (id, title, price, description, imageUrl) => {
+    // Scroll to form
+    document.getElementById('add-tour-form').scrollIntoView({ behavior: 'smooth' });
+
+    // Populate form
+    document.getElementById('tour-title').value = title;
+    document.getElementById('tour-price').value = price;
+    document.getElementById('tour-desc').value = description;
+    document.getElementById('tour-image').value = imageUrl;
+
+    // Set State
+    editingTourId = id;
+    tourSubmitBtn.innerText = 'Update Tour';
+};
+
+
+// Load Functions
+
+async function loadToursInAdmin() {
+    const container = document.getElementById('admin-tours-list');
+    if (!container) return;
+
+    try {
+        const q = query(collection(db, "tours"), orderBy("created_at", "desc"));
+        const querySnapshot = await getDocs(q);
+
+        const tours = [];
+        querySnapshot.forEach((doc) => {
+            tours.push({ id: doc.id, ...doc.data() });
+        });
+
+        if (!tours.length) {
+            container.innerHTML = '<p class="p-8 text-center text-gray-500">No tours found.</p>';
+            return;
+        }
+
+        container.innerHTML = tours.map(tour => {
+            // Escape strings for safety in onclick
+            const safeTitle = tour.title.replace(/'/g, "\\'");
+            const safeDesc = tour.description.replace(/'/g, "\\'").replace(/\n/g, " ");
+
+            return `
+            <div class="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0">
+                <div class="flex items-center gap-4">
+                    <img src="${tour.image_url}" class="w-16 h-16 rounded-lg object-cover border border-gray-200" alt="" onerror="this.src='https://placehold.co/100?text=Err'">
+                    <div>
+                        <h4 class="font-bold text-gray-800 line-clamp-1">${tour.title}</h4>
+                        <p class="text-sm text-gray-500 font-mono">LKR ${tour.price}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                     <button onclick="editTour('${tour.id}', '${safeTitle}', '${tour.price}', '${safeDesc}', '${tour.image_url}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                     </button>
+                     <button onclick="deleteTour('${tour.id}')" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                     </button>
+                </div>
+            </div>
+        `}).join('');
+    } catch (error) {
+        console.error(error);
+        container.innerHTML = '<p class="p-4 text-red-500 text-center text-sm">Error loading data.</p>';
+    }
+}
+</script>
+</body>
+
+</html>
